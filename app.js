@@ -162,7 +162,7 @@ const mongoUrl="mongodb+srv://Hargun_FEcommerce:hZwwLSHq6vks@cluster0.7rlmlbe.mo
 var cors=require('cors');
 const bodyParser=require('body-parser');
 
-var port = process.env.PORT || 8425
+var port = process.env.PORT || 8000;
 var db;
 
 app.use(bodyParser.urlencoded({extended:true}));

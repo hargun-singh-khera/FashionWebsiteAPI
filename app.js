@@ -6,8 +6,8 @@ const uri = "mongodb+srv://Hargun_Ecommerce:<password>@cluster0.jvgezjy.mongodb.
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 // const MongoClient=mongo.MongoClient;
 // const mongoUrl = "mongodb://localhost:27017";
-const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
-// const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
+// const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
+const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
 const cors=require('cors');
 const bodyParser=require('body-parser');
 var db;

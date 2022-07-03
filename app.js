@@ -1,13 +1,10 @@
 const express=require('express');
 const app = express();
 const mongo=require('mongodb');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://Hargun_Ecommerce:<password>@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-// const MongoClient=mongo.MongoClient;
+const MongoClient=mongo.MongoClient;
 // const mongoUrl = "mongodb://localhost:27017";
-// const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
-const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
+const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
+// const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
 const cors=require('cors');
 const bodyParser=require('body-parser');
 var db;
@@ -196,8 +193,3 @@ MongoClient.connect(mongoUrl,(err,client)=>{
     })
 })
 
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});

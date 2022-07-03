@@ -3,8 +3,8 @@ const app = express();
 const mongo=require('mongodb');
 const MongoClient=mongo.MongoClient;
 // const mongoUrl = "mongodb://localhost:27017";
-// const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
-const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
+const mongoUrl = 'mongodb+srv://Hargun_Ecommerce:hZwwLSHq6vks@cluster0.jvgezjy.mongodb.net/?retryWrites=true&w=majority';
+// const mongoUrl = 'mongodb+srv://deepika:deepika@cluster0.ugmwb.mongodb.net/?retryWrites=true&w=majority';
 // mongodb+srv://Hargun_FEcommerce:<password>@cluster0.7rlmlbe.mongodb.net/?retryWrites=true&w=majority
 const cors=require('cors');
 const bodyParser=require('body-parser');

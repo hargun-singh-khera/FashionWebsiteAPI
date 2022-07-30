@@ -43,7 +43,7 @@ app.get('/men/:id', (req,res)=> {
     })
 })
 
-app.get('/women/product/:id', (req,res)=> {
+app.get('/women/:id', (req,res)=> {
 
     let id = Number(req.params.id);
     db.collection('location').find({"location_id": id}).toArray((err,result)=> {

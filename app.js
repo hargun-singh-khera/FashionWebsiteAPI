@@ -46,7 +46,7 @@ app.get('/men/:id', (req,res)=> {
 app.get('/women/:id', (req,res)=> {
 
     let id = Number(req.params.id);
-    db.collection('location').find({"location_id": id}).toArray((err,result)=> {
+    db.collection('women').find({"product_id": id}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })

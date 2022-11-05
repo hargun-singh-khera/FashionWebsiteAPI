@@ -28,7 +28,7 @@ app.get('/products/:men', (req,res)=> {
     })
 })
 
-app.get('/men/:id', (req,res)=> {
+app.get('/products/men/:id', (req,res)=> {
     
     let id = Number(req.params.id);
     db.collection('men').find({"product_id": id}).toArray((err,result)=> {
@@ -46,7 +46,7 @@ app.get('/products/:women', (req,res)=> {
     })
 })
 
-app.get('/women/:id', (req,res)=> {
+app.get('/products/women/:id', (req,res)=> {
 
     let id = Number(req.params.id);
     db.collection('women').find({"product_id": id}).toArray((err,result)=> {

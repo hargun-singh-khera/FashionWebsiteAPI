@@ -29,9 +29,8 @@ app.get('/products/:men', (req,res)=> {
 })
 
 app.get('/products/men/:id', (req,res)=> {
-    
     let id = Number(req.params.id);
-    db.collection('men').find({"product_id": id}).toArray((err,result)=> {
+    db.collection('products').find({"product_id": id}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
@@ -47,23 +46,19 @@ app.get('/products/:women', (req,res)=> {
 })
 
 app.get('/products/women/:id', (req,res)=> {
-
     let id = Number(req.params.id);
-    db.collection('women').find({"product_id": id}).toArray((err,result)=> {
+    db.collection('products').find({"product_id": id}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
 })
 
 app.post('/findproduct', (req,res)=> {
-    // console.log(req.body);
-    // res.send(req.body)
     db.collection('products').find({product_id:{$in:req.body}}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result)
     })
 })
-
 
 app.get('/orders',(req,res)=> {
     db.collection('orders').find().toArray((err,result)=>{

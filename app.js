@@ -96,17 +96,18 @@ app.post('/inserttocart',(req,res)=>{
     })
 })
 
-app.delete('emptycart',(req,res)=> {
-    db.collection('cart').deleteAll({},(err,result)=> {
+app.delete('/emptycart',(req,res)=> {
+    db.collection('cart').deleteMany({},(err,result)=> {
         if (err) throw err;
-        res.send("Shopping cart has been empty successfully");
+        res.send(result);
     })
 })
 
-app.delete('emptycart/:id', (req,res)=> {
+app.delete('/emptycart/:id', (req,res)=> {
+    var id = Number(req.params.id);
     db.collection('cart').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
-        res.send("An item from cart has been deleted successfully")
+        res.send(result)
     })
 })
 
@@ -118,24 +119,24 @@ app.get('/wishlist',(req,res)=> {
 })
 
 app.post('/inserttowishlist',(req,res)=>{
-
     db.collection('wishlist').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Wishlist has been updated successfully");
     })
 })
 
-app.delete('emptywishlist',(req,res)=> {
+app.delete('/emptywishlist',(req,res)=> {
     db.collection('wishlist').deleteMany({},(err,result)=> {
         if (err) throw err;
-        res.send("User wishlist has been deleted successfully")
+        res.send(result)
     })
 })
 
-app.delete('emptywishlist/:id',(req,res)=> {
+app.delete('/emptywishlist/:id',(req,res)=> {
+    var id = Number(req.params.id);
     db.collection('wishlist').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
-        res.send("An item from the user wishlist has been deleted successfully")
+        res.send(result)
     })
 })
 

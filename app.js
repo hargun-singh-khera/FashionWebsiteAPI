@@ -52,8 +52,23 @@ app.get('/women/:id', (req,res)=> {
     })
 })
 
+app.get('/orders',(req,res)=> {
+    db.collection('orders').find().toArray((err,result)=>{
+        if (err) throw err;
+        res.send(result)
+    })
+})
+
+
+app.post('/placeorder',(req,res)=>{
+    db.collection('orders').insertOne(req.body,(err,result)=>{
+        if(err) throw err;
+        res.send("Order placed");
+    })
+})
+
 app.delete('/deleteorder', (req,res)=> {
-    db.collection('orders').remove({},(err,result)=> {
+    db.collection('orders').deleteMany({},(err,result)=> {
         if (err) throw err;
         res.send(result);
     })
@@ -61,81 +76,66 @@ app.delete('/deleteorder', (req,res)=> {
 
 app.delete('/deleteorder/:id',(req,res)=> {
     var id = Number(req.params.id);
-    db.collection('orders').remove({id:id},(err,result)=> {
+    db.collection('orders').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
         res.send(result);
     })
 })
 
-app.post('/placeorder',(req,res)=>{
-    db.collection('orders').insert(req.body,(err,result)=>{
-        if(err) throw err;
-        res.send("Order placed");
+app.get('/cart',(req,res)=> {
+    db.collection('cart').find().toArray((err,result)=> {
+        if (err) throw err;
+        res.send(result)
     })
 })
 
-app.post('/shoppingcart',(req,res)=>{
-    db.collection('cart').insert(req.body,(err,result)=>{
+app.post('/inserttocart',(req,res)=>{
+    db.collection('cart').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Product has been added to cart successfully");
     })
 })
 
-app.post('/userwishlist',(req,res)=>{
+app.delete('emptycart',(req,res)=> {
+    db.collection('cart').deleteAll({},(err,result)=> {
+        if (err) throw err;
+        res.send("Shopping cart has been empty successfully");
+    })
+})
 
-    db.collection('wishlist').insert(req.body,(err,result)=>{
+app.delete('emptycart/:id', (req,res)=> {
+    db.collection('cart').deleteOne({id:id},(err,result)=> {
+        if (err) throw err;
+        res.send("An item from cart has been deleted successfully")
+    })
+})
+
+app.get('/wishlist',(req,res)=> {
+    db.collection('wishlist').find().toArray((err,result)=> {
+        if (err) throw err;
+        res.send(result)
+    })
+})
+
+app.post('/inserttowishlist',(req,res)=>{
+
+    db.collection('wishlist').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Wishlist has been updated successfully");
     })
 })
 
-// app.post('/postorder',(req,res)=>{
-//     // console.log(req.body);
-//     // res.send('ok')
-//     db.collection('orders').insertOne(req.body,(err,result)=>{
-//         if(err) throw err;
-//         res.send("Appointment Booked");
-//     })
-// })
-
-
-
-app.post('/serviceArray',(req,res)=>{
-    // console.log(req.body);
-    // res.send(req.body)
-    db.collection('services').find({id:{$in:req.body}}).toArray((err,result)=>{
-        if(err) throw err;
-        res.send(result)
+app.delete('emptywishlist',(req,res)=> {
+    db.collection('wishlist').deleteMany({},(err,result)=> {
+        if (err) throw err;
+        res.send("User wishlist has been deleted successfully")
     })
 })
 
-app.put('/updatestatus/:id', (req, res)=>{
-    var id = Number(req.params.id);
-    db.collection('orders').update(
-        {id: id},
-        {
-            $set: {
-                "date": req.body.date,
-                "bank": req.body.bank,
-                "bank_status": req.body.bank_status,
-                "status":"Booked"
-            }
-        }
-    )
-    res.send("Data Updated");
-})
-
-
-//query params example city w.r.t state
-app.get('/city', (req,res)=> {
-    var query = {};
-    // console.log(req.query.city);
-    if(req.query.city && req.query.feature) {
-        query = {state_id: Number(req.query.city),feature: Number(req.query.feature)};
-    } 
-    db.collection('location').find(query).toArray((err,result)=> {
+app.delete('emptywishlist/:id',(req,res)=> {
+    db.collection('wishlist').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
-        res.send(result);
+        res.send("An item from the user wishlist has been deleted successfully")
     })
 })
 

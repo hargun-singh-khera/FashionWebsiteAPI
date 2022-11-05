@@ -19,25 +19,28 @@ app.get('/', (req, res) => {
     res.send("<h1>This is my first Express App</h1>");
 })
 
-
-app.get('/men', (req,res)=> {
-    db.collection('men').find().toArray((err,result)=> {
-        if (err) throw err;
-        res.send(result);
-    })
-})
-
-app.get('/women', (req,res)=> {
-    db.collection('women').find().toArray((err,result)=> {
+app.get('/products/:men', (req,res)=> {
+    let department = String(req.params.men);
+    console.log(department)
+    db.collection('products').find({"department": department}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
 })
 
 app.get('/men/:id', (req,res)=> {
-
+    
     let id = Number(req.params.id);
     db.collection('men').find({"product_id": id}).toArray((err,result)=> {
+        if (err) throw err;
+        res.send(result);
+    })
+})
+
+app.get('/products/:women', (req,res)=> {
+    let department = String(req.params.women)
+    console.log(department)
+    db.collection('products').find({"department": department}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
@@ -52,6 +55,16 @@ app.get('/women/:id', (req,res)=> {
     })
 })
 
+app.post('/findproduct', (req,res)=> {
+    // console.log(req.body);
+    // res.send(req.body)
+    db.collection('products').find({product_id:{$in:req.body}}).toArray((err,result)=> {
+        if (err) throw err;
+        res.send(result)
+    })
+})
+
+
 app.get('/orders',(req,res)=> {
     db.collection('orders').find().toArray((err,result)=>{
         if (err) throw err;
@@ -59,9 +72,8 @@ app.get('/orders',(req,res)=> {
     })
 })
 
-
 app.post('/placeorder',(req,res)=>{
-    db.collection('orders').insertOne(req.body,(err,result)=>{
+    db.collection('orders').insertMany(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Order placed");
     })
@@ -75,7 +87,7 @@ app.delete('/deleteorder', (req,res)=> {
 })
 
 app.delete('/deleteorder/:id',(req,res)=> {
-    var id = Number(req.params.id);
+    let id = Number(req.params.id);
     db.collection('orders').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
         res.send(result);
@@ -104,7 +116,7 @@ app.delete('/emptycart',(req,res)=> {
 })
 
 app.delete('/emptycart/:id', (req,res)=> {
-    var id = Number(req.params.id);
+    let id = Number(req.params.id);
     db.collection('cart').deleteOne({id:id},(err,result)=> {
         if (err) throw err;
         res.send(result)
@@ -125,6 +137,14 @@ app.post('/inserttowishlist',(req,res)=>{
     })
 })
 
+app.delete('/emptywishlist/:id',(req,res)=> {
+    let id = Number(req.params.id);
+    db.collection('wishlist').deleteOne({id:id},(err,result)=> {
+        if (err) throw err;
+        res.send(result)
+    })
+})
+
 app.delete('/emptywishlist',(req,res)=> {
     db.collection('wishlist').deleteMany({},(err,result)=> {
         if (err) throw err;
@@ -132,13 +152,6 @@ app.delete('/emptywishlist',(req,res)=> {
     })
 })
 
-app.delete('/emptywishlist/:id',(req,res)=> {
-    var id = Number(req.params.id);
-    db.collection('wishlist').deleteOne({id:id},(err,result)=> {
-        if (err) throw err;
-        res.send(result)
-    })
-})
 
 //connect with mongodb
 MongoClient.connect(mongoUrl,(err,client)=> {

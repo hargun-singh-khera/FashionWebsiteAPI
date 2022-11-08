@@ -182,7 +182,7 @@ app.delete('/emptyWishlist',(req,res)=> {
 })
 
 app.get('/costfilter', (req,res) => {
-    // let query = {};
+    let query = {};
     let lcost = Number(req.query.lcost);
     let hcost = Number(req.query.hcost);
     if(req.query.lcost && req.query.hcost)

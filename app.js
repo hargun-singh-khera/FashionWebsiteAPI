@@ -7,7 +7,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 var db;
 
-const port = process.env.PORT || 8495;
+const port = 8495;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -19,42 +19,64 @@ app.get('/', (req, res) => {
     res.send("<h1>This is my first Express App</h1>");
 })
 
-app.get('/products/:men', (req,res)=> {
-    let department = String(req.params.men);
-    console.log(department)
-    db.collection('products').find({"department": department}).toArray((err,result)=> {
+app.get('/products/:department', (req,res)=> {
+    let department = req.params.department;
+    db.collection('products').find({"department": department}).toArray((err,result)=> { 
         if (err) throw err;
         res.send(result);
     })
 })
 
-app.get('/products/men/:id', (req,res)=> {
+app.get('/products/:department/:id', (req,res)=> {
+    let department = req.params.department;
     let id = Number(req.params.id);
-    db.collection('products').find({"product_id": id}).toArray((err,result)=> {
+    db.collection('products').find({"product_id": id},{"department": department}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
 })
 
-app.get('/products/:women', (req,res)=> {
-    let department = String(req.params.women)
-    console.log(department)
-    db.collection('products').find({"department": department}).toArray((err,result)=> {
-        if (err) throw err;
-        res.send(result);
-    })
-})
-
-app.get('/products/women/:id', (req,res)=> {
+app.put('/updateProductRating/:id', (req,res)=> {
     let id = Number(req.params.id);
-    db.collection('products').find({"product_id": id}).toArray((err,result)=> {
-        if (err) throw err;
-        res.send(result);
-    })
+    let rating = req.body.rating;
+    db.collection('products').updateOne(
+        {"product_id": id}, {
+            $set: {
+                "rating": rating
+            }
+        }
+    )
+    res.send("Data updated")
+})
+
+app.put('/updateProductPrice/:id', (req,res)=> {
+    let id = Number(req.params.id);
+    let price = req.body.price;
+    db.collection('products').updateOne(
+        {"product_id": id}, {
+            $set: {
+                "price": price
+            }
+        }
+    )
+    res.send("Data updated")
+})
+
+app.put('/updateProductAvailability/:id', (req,res)=> {
+    let id = Number(req.params.id);
+    let availability = req.body.availability;
+    db.collection('products').updateOne(
+        {"product_id": id}, {
+            $set: {
+                "availability": availability
+            }
+        }
+    )
+    res.send("Data updated")
 })
 
 app.post('/findproduct', (req,res)=> {
-    db.collection('products').find({product_id:{$in:req.body}}).toArray((err,result)=> {
+    db.collection('products').find({"product_id": {$in:req.body}}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result)
     })
@@ -68,24 +90,36 @@ app.get('/orders',(req,res)=> {
 })
 
 app.post('/placeorder',(req,res)=>{
-    db.collection('orders').insertMany(req.body,(err,result)=>{
+    db.collection('orders').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Order placed");
     })
 })
 
+app.put('/updateOrderStatus/:id', (req,res)=> {
+    var id = Number(req.params.id);
+    db.collection('orders').updateOne(
+        {product_id:id}, {
+            $set: {
+                "status": "Booked"
+            }
+        }
+    )
+    res.send("Data Updated")
+})
+
 app.delete('/deleteorder', (req,res)=> {
     db.collection('orders').deleteMany({},(err,result)=> {
         if (err) throw err;
-        res.send(result);
+        res.send("All orders has been deleted successfully");
     })
 })
 
 app.delete('/deleteorder/:id',(req,res)=> {
     let id = Number(req.params.id);
-    db.collection('orders').deleteOne({id:id},(err,result)=> {
+    db.collection('orders').deleteOne({"product_id":id},(err,result)=> {
         if (err) throw err;
-        res.send(result);
+        res.send("Some orders has been deleted from your account");
     })
 })
 
@@ -96,25 +130,25 @@ app.get('/cart',(req,res)=> {
     })
 })
 
-app.post('/inserttocart',(req,res)=>{
+app.post('/insertToCart',(req,res)=>{
     db.collection('cart').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Product has been added to cart successfully");
     })
 })
 
-app.delete('/emptycart',(req,res)=> {
+app.delete('/emptyCart',(req,res)=> {
     db.collection('cart').deleteMany({},(err,result)=> {
         if (err) throw err;
-        res.send(result);
+        res.send("All cart items have been deleted successfully");
     })
 })
 
-app.delete('/emptycart/:id', (req,res)=> {
+app.delete('/emptyCart/:id', (req,res)=> {
     let id = Number(req.params.id);
-    db.collection('cart').deleteOne({id:id},(err,result)=> {
+    db.collection('cart').deleteOne({"product_id":id},(err,result)=> {
         if (err) throw err;
-        res.send(result)
+        res.send("Some cart items has been deleted successfully");
     })
 })
 
@@ -125,28 +159,41 @@ app.get('/wishlist',(req,res)=> {
     })
 })
 
-app.post('/inserttowishlist',(req,res)=>{
+app.post('/insertToWishlist',(req,res)=>{
     db.collection('wishlist').insertOne(req.body,(err,result)=>{
         if(err) throw err;
         res.send("Wishlist has been updated successfully");
     })
 })
 
-app.delete('/emptywishlist/:id',(req,res)=> {
+app.delete('/emptyWishlist/:id',(req,res)=> {
     let id = Number(req.params.id);
-    db.collection('wishlist').deleteOne({id:id},(err,result)=> {
+    db.collection('wishlist').deleteOne({"product_id":id},(err,result)=> {
         if (err) throw err;
-        res.send(result)
+        res.send("Some wishlist item has been deleted successfully");
     })
 })
 
-app.delete('/emptywishlist',(req,res)=> {
+app.delete('/emptyWishlist',(req,res)=> {
     db.collection('wishlist').deleteMany({},(err,result)=> {
         if (err) throw err;
-        res.send(result)
+        res.send("All wishlist items have been deleted successfully");
     })
 })
 
+app.get('/costfilter', (req,res) => {
+    // let query = {};
+    let lcost = Number(req.query.lcost);
+    let hcost = Number(req.query.hcost);
+    if(req.query.lcost && req.query.hcost)
+    {
+        query = {$and: [{"price":{$gte:lcost,$lte:hcost}}]}
+    }
+    db.collection('products').find(query).toArray((err,result)=> {
+        if (err) throw err;
+        res.send(result)
+    })
+})
 
 //connect with mongodb
 MongoClient.connect(mongoUrl,(err,client)=> {

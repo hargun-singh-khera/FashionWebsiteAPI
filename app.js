@@ -30,7 +30,7 @@ app.get('/products/:department', (req,res)=> {
 app.get('/products/:department/:id', (req,res)=> {
     let department = req.params.department;
     let id = Number(req.params.id);
-    db.collection('products').find({"product_id": id},{"department": department}).toArray((err,result)=> {
+    db.collection('products').find({$and: [{"product_id": id},{"department": department}]}).toArray((err,result)=> {
         if (err) throw err;
         res.send(result);
     })
